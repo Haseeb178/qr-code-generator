@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Privacy Policy — QR Code Generator Pro</title>
+  <meta name="description" content="Privacy policy for QR Code Generator Pro. We prioritize user privacy and do not collect personal data.">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <div class="brand">
+      <div class="logo">QR</div>
+      <div>
+        <div style="font-weight:700">QR Code Generator Pro</div>
+      </div>
+    </div>
+    <nav class="nav" aria-label="Main Navigation">
+      <a href="index.html">Home</a>
+      <a href="about.html">About</a>
+      <a href="contact.html">Contact</a>
+      <a href="privacy-policy.html">Privacy</a>
+      <a href="terms.html">Terms</a>
+    </nav>
+  </header>
+
+  <main class="container">
+    <section class="card">
+      <h1>Privacy Policy</h1>
+      <p class="muted">Last updated: <strong id="pp-date"></strong></p>
+
+      <h2>Data we collect</h2>
+      <p class="muted">This site does not collect personal data on its own servers. QR codes you generate are created in your browser and stored only in your browser local storage (history) if you choose to generate them.</p>
+
+      <h2>Cookies</h2>
+      <p class="muted">We use browser storage (localStorage) to keep a short history of generated QR codes for your convenience. No tracking cookies or third-party trackers are used by default.</p>
+
+      <h2>Third-party services</h2>
+      <p class="muted">We may include third-party libraries loaded via CDN. These providers may collect minimal data for delivery (e.g., CDN requests). If you run the site locally or on your own hosting, CDN requests are optional.
++      <br><strong>Advertising:</strong> We may display ads (e.g., Google AdSense). Advertisers may use cookies and collect certain information. Please refer to the advertiser's privacy policy for details.</p>
+
+      <h2>Security</h2>
+      <p class="muted">This tool runs entirely in the browser. We recommend hosting over HTTPS for production use to protect integrity of the code and CDN resources.</p>
+
+      <h2>Contact</h2>
+      <p class="muted">If you have questions about this privacy policy, contact us via the <a href="contact.html">contact page</a>.</p>
+
+      <div class="footer">
+        <div>© <span id="year-pp"></span> QR Code Generator Pro</div>
+      </div>
+    </section>
+  </main>
+  <script>document.getElementById('pp-date').textContent = new Date().toLocaleDateString(); document.getElementById('year-pp').textContent = new Date().getFullYear();</script>
+</body>
+</html>

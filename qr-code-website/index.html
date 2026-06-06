@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>QR Code Generator Pro — Create QR Codes Instantly</title>
+  <meta name="description" content="QR Code Generator Pro — generate, customize and download QR codes instantly. Free, fast and mobile-friendly tool.">
+  <meta name="keywords" content="qr code, qr generator, qr code generator, download qr, generate qr">
+  <meta name="author" content="QR Code Generator Pro">
+  <!-- Open Graph -->
+  <meta property="og:title" content="QR Code Generator Pro">
+  <meta property="og:description" content="Generate and customize QR codes instantly. Download high-resolution PNGs.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="/">
+  <meta property="og:image" content="/assets/logo.svg">
+  <link rel="icon" href="assets/logo.svg">
+  <link rel="stylesheet" href="style.css">
+  <meta name="theme-color" content="#ffffff">
+</head>
+<body>
+  <header>
+    <div class="brand">
+      <div class="logo" aria-hidden="true">QR</div>
+      <div>
+        <div style="font-weight:700">QR Code Generator Pro</div>
+        <div style="font-size:12px;color:var(--muted)">Free & fast QR codes</div>
+      </div>
+    </div>
+    <nav class="nav" aria-label="Main Navigation">
+      <a href="index.html">Home</a>
+      <a href="about.html">About</a>
+      <a href="contact.html">Contact</a>
+      <a href="privacy-policy.html">Privacy</a>
+      <a href="terms.html">Terms</a>
+    </nav>
+  </header>
+
+  <main class="container">
+    <section class="card" aria-label="QR Generator">
+      <div>
+        <h1>Create a QR Code</h1>
+        <p class="muted">Enter text or a URL below. QR preview updates automatically (debounced).</p>
+
+        <div class="form-row">
+          <input id="text-input" class="input" placeholder="Enter URL or text" aria-label="Text or URL input">
+        </div>
+
+        <div class="controls">
+          <button id="generate-btn" class="btn small">Generate QR Code</button>
+          <button id="copy-btn" class="btn secondary small">Copy Input</button>
+          <button id="clear-btn" class="btn ghost small">Clear</button>
+          <button id="download-btn" class="btn small">Download PNG</button>
+        </div>
+
+        <div class="options">
+          <div class="option">
+            <label>Size</label>
+            <select id="size-select" class="size-select">
+              <option value="128">Small (128px)</option>
+              <option value="256" selected>Medium (256px)</option>
+              <option value="512">Large (512px)</option>
+            </select>
+          </div>
+          <div class="option">
+            <label>QR Color</label>
+            <input id="dark-color" class="color-input" type="color" value="#111827" title="QR dark color">
+          </div>
+          <div class="option">
+            <label>Background</label>
+            <input id="light-color" class="color-input" type="color" value="#ffffff" title="Background color">
+          </div>
+        </div>
+
+        <div class="history">
+          <h2 style="font-size:15px;margin:12px 0 8px">History</h2>
+          <div id="history-list" class="history-list" aria-live="polite"></div>
+        </div>
+      </div>
+
+      <aside>
+        <div class="preview">
+          <div class="muted">Preview</div>
+          <div class="qr-canvas" id="preview-wrap">
+            <canvas id="qr-canvas" aria-label="QR preview"></canvas>
+          </div>
+          <div id="qr-info" class="muted">Enter text to generate</div>
+        </div>
+        <div class="footer">
+          <div>© <span id="year"></span> QR Code Generator Pro — <a href="privacy-policy.html">Privacy</a> • <a href="terms.html">Terms</a></div>
+        </div>
+      </aside>
+    </section>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
