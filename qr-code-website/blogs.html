@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="style.css">
+<title>QR Code Blog</title>
+
+<style>
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Poppins,sans-serif;
+}
+
+body{
+background:#f5f7fb;
+padding:40px 20px;
+}
+
+h1{
+text-align:center;
+margin-bottom:40px;
+}
+
+.blog-container{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+gap:20px;
+max-width:1400px;
+margin:auto;
+}
+
+.blog-card{
+background:#fff;
+padding:20px;
+border-radius:12px;
+box-shadow:0 4px 15px rgba(0,0,0,.08);
+transition:.3s;
+}
+
+.blog-card:hover{
+transform:translateY(-5px);
+}
+
+.blog-card h3{
+margin-bottom:10px;
+}
+
+.blog-card p{
+color:#666;
+margin-bottom:15px;
+}
+
+.blog-card button{
+background:#2563eb;
+color:#fff;
+border:none;
+padding:10px 20px;
+border-radius:6px;
+cursor:pointer;
+}
+
+.blog-card button:hover{
+background:#1d4ed8;
+}
+
+.modal{
+display:none;
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:rgba(0,0,0,.7);
+z-index:999;
+overflow:auto;
+}
+
+.modal-content{
+background:white;
+width:90%;
+max-width:900px;
+margin:50px auto;
+padding:30px;
+border-radius:12px;
+position:relative;
+}
+
+.close{
+position:absolute;
+right:20px;
+top:15px;
+font-size:30px;
+cursor:pointer;
+}
+
+.modal-content h2{
+margin-bottom:20px;
+}
+
+.modal-content p{
+line-height:1.8;
+color:#444;
+}
+</style>
+</head>
+
+<body>
+    <header>
+    <div class="brand">
+      <div class="logo">QR</div>
+      <div>
+        <div style="font-weight:700">QR Code Generator Pro</div>
+        <div style="font-size:12px;color:var(--muted)">Free & fast QR codes</div>
+      </div>
+    </div>
+    <nav class="nav" aria-label="Main Navigation">
+      <a href="index.html">Home</a>
+      <a href="about.html">About</a>
+      <a href="contact.html">Contact</a>
+      <a href="privacy-policy.html">Privacy</a>
+      <a href="terms.html">Terms</a>
+      <a href="blogs.html">Blogs</a>
+    </nav>
+  </header>
+
+<h1>QR Code Blog Center</h1>
+
+<div class="blog-container" id="blogContainer"></div>
+
+<div class="modal" id="blogModal">
+<div class="modal-content">
+<span class="close" id="closeModal">&times;</span>
+<h2 id="modalTitle"></h2>
+<p id="modalContent"></p>
+
+</div>
+</div>
+
+<script>
+
+const blogs = [
+
+{
+title:"What is a QR Code?",
+short:"Learn the basics of QR Codes and how they work.",
+content:`QR Code stands for Quick Response Code. It is a two-dimensional barcode that can store information such as URLs, text, contact details, WiFi credentials and much more.
+
+Businesses use QR codes for marketing, payments, customer engagement and digital communication. Users simply scan the code using a smartphone camera and instantly access the stored information.
+
+Today QR codes are used in restaurants, hospitals, schools, online stores and many other industries because they are fast, convenient and easy to use.`
+},
+
+{
+title:"How QR Codes Work",
+short:"Understand the technology behind QR Codes.",
+content:`QR codes store data in a pattern of black and white squares.
+
+When a smartphone camera scans the code, decoding software interprets the pattern and converts it back into readable information.
+
+This process happens within seconds, allowing users to instantly open websites, save contacts or access digital content.`
+},
+
+{
+title:"Benefits of QR Codes",
+short:"Explore the major advantages of QR technology.",
+content:`QR codes are easy to create, inexpensive and highly versatile.
+
+They improve customer experience, reduce manual data entry and help businesses connect offline marketing with digital platforms.
+
+Their flexibility makes them useful in nearly every industry.`
+},
+
+{
+title:"QR Codes for Business",
+short:"How companies use QR codes effectively.",
+content:`Businesses use QR codes for product information, promotions, customer support and digital menus.
+
+QR codes increase engagement while reducing printing costs.
+
+They also provide customers with instant access to information through smartphones.`
+},
+
+{
+title:"QR Codes for Restaurants",
+short:"Digital menus and contactless experiences.",
+content:`Restaurants use QR codes to display digital menus.
+
+Customers scan a code and instantly browse menu items without touching printed materials.
+
+This improves hygiene and allows menu updates without reprinting costs.`
+},
+
+{
+title:"QR Codes for Marketing",
+short:"Boost marketing campaigns with QR codes.",
+content:`Marketers place QR codes on posters, packaging and advertisements.
+
+Scanning directs users to landing pages, promotions or social media profiles.
+
+This creates measurable engagement and better campaign performance.`
+},
+
+{
+title:"Dynamic vs Static QR Codes",
+short:"Understand the key differences.",
+content:`Static QR codes cannot be edited after creation.
+
+Dynamic QR codes allow the destination URL or information to be updated later.
+
+Businesses often prefer dynamic QR codes because of their flexibility and tracking features.`
+},
+
+{
+title:"QR Code Security Tips",
+short:"Stay safe while scanning QR codes.",
+content:`Always scan QR codes from trusted sources.
+
+Avoid scanning suspicious codes found in public places without verification.
+
+Check the URL before opening and use security software when necessary.`
+},
+
+{
+title:"QR Codes for Education",
+short:"Transform learning experiences.",
+content:`Teachers use QR codes to share assignments, videos and educational resources.
+
+Students can access content instantly through their mobile devices.
+
+This creates a more interactive learning environment.`
+},
+
+{
+title:"QR Codes for Events",
+short:"Simplify event management.",
+content:`Event organizers use QR codes for tickets, registration and attendee information.
+
+Scanning speeds up entry and reduces paperwork.
+
+It also improves attendee experience.`
+},
+
+{
+title:"QR Codes in Healthcare",
+short:"Improve healthcare efficiency.",
+content:`Hospitals use QR codes for patient records, medicine tracking and appointment management.
+
+Healthcare staff can access important information quickly.
+
+This reduces errors and improves operational efficiency.`
+},
+
+{
+title:"QR Codes for Payments",
+short:"Fast and secure digital payments.",
+content:`Payment QR codes allow users to pay instantly using mobile banking apps.
+
+They reduce cash handling and speed up transactions.
+
+Many businesses now rely on QR payments as a standard payment option.`
+},
+
+{
+title:"QR Codes for Social Media",
+short:"Grow your online audience.",
+content:`QR codes can link directly to Instagram, Facebook, LinkedIn and other social platforms.
+
+Users scan and instantly follow your profile.
+
+This improves social media growth and engagement.`
+},
+
+{
+title:"QR Codes for Websites",
+short:"Drive traffic effortlessly.",
+content:`Website QR codes allow users to access a webpage instantly.
+
+They eliminate the need to manually type URLs.
+
+This improves user convenience and website visits.`
+},
+
+{
+title:"QR Codes for Contact Sharing",
+short:"Modern digital business cards.",
+content:`QR codes can store contact information.
+
+Users scan and instantly save names, phone numbers and email addresses.
+
+This makes networking easier and more professional.`
+},
+
+{
+title:"QR Codes for E-Commerce",
+short:"Improve online shopping experiences.",
+content:`Online stores use QR codes for product information, reviews and promotions.
+
+Customers access details instantly before making purchases.
+
+This improves trust and conversion rates.`
+},
+
+{
+title:"Future of QR Codes",
+short:"What lies ahead for QR technology?",
+content:`QR codes continue to evolve with mobile technology.
+
+They are expected to play a larger role in payments, authentication and digital experiences.
+
+Future innovations will likely make them even more powerful.`
+},
+
+{
+title:"Common QR Code Mistakes",
+short:"Avoid these common errors.",
+content:`Poor contrast, small sizes and broken links are common mistakes.
+
+Always test QR codes before publishing them.
+
+Proper design ensures a better user experience.`
+},
+
+{
+title:"QR Code Design Tips",
+short:"Create effective QR codes.",
+content:`Maintain sufficient contrast and avoid cluttered designs.
+
+Use brand colors carefully while preserving scanability.
+
+Always test the final result on multiple devices.`
+},
+
+{
+title:"Best QR Code Practices",
+short:"Professional recommendations.",
+content:`Keep content relevant and mobile-friendly.
+
+Use clear calls to action near the QR code.
+
+Track performance and update campaigns regularly for better results.`
+}
+
+];
+
+const container = document.getElementById("blogContainer");
+
+blogs.forEach(blog => {
+
+container.innerHTML += `
+<div class="blog-card">
+<h3>${blog.title}</h3>
+<p>${blog.short}</p>
+<button onclick="openBlog('${blog.title}')">
+Read More
+</button>
+</div>
+`;
+
+});
+
+function openBlog(title){
+
+const blog = blogs.find(b => b.title === title);
+
+document.getElementById("modalTitle").innerText = blog.title;
+document.getElementById("modalContent").innerText = blog.content;
+
+document.getElementById("blogModal").style.display = "block";
+}
+
+document.getElementById("closeModal").onclick = () => {
+document.getElementById("blogModal").style.display = "none";
+}
+
+window.onclick = (e) => {
+if(e.target == document.getElementById("blogModal")){
+document.getElementById("blogModal").style.display = "none";
+}
+}
+</script>
+
+</body>
+</html>
