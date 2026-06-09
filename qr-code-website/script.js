@@ -13,6 +13,8 @@ const qrCanvas = el('qr-canvas');
 const qrInfo = el('qr-info');
 const historyList = el('history-list');
 const yearEl = el('year');
+let downloadClickStep = 0;
+const AD_URL = "https://www.effectivecpmnetwork.com/e3rszd4sd?key=598bd85fe822858116cea6ed646dda59";
 
 yearEl.textContent = new Date().getFullYear();
 
@@ -209,7 +211,17 @@ generateBtn.addEventListener('click', ()=>{
 });
 copyBtn.addEventListener('click', copyInput);
 clearBtn.addEventListener('click', clearAll);
-downloadBtn.addEventListener('click', downloadPNG);
+//downloadBtn.addEventListener('click', downloadPNG);
+downloadBtn.addEventListener('click', () => {
+  if (downloadClickStep === 0) {
+    downloadClickStep = 1;
+    window.open(AD_URL, '_blank');
+    return;
+  }
+
+  downloadClickStep = 0; // reset
+  downloadPNG();
+});
 
 // Initialize
 (function(){
