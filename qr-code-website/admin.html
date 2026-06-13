@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="style.css">
+<title>Admin Blog Panel</title>
+
+<style>
+body{
+    font-family: Arial;
+    background:#f5f6fa;
+    margin:0;
+    padding:20px;
+}
+
+h2,h3{
+    color:#2f3640;
+}
+
+/* HEADER RESPONSIVE */
+header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    flex-wrap:wrap;
+    gap:10px;
+    padding-bottom:15px;
+}
+
+/* INPUTS */
+input, textarea{
+    width:100%;
+    padding:10px;
+    margin:8px 0;
+    border:1px solid #ccc;
+    border-radius:8px;
+    font-size:14px;
+    box-sizing:border-box;
+}
+
+textarea{
+    height:120px;
+    resize:none;
+}
+
+/* BUTTONS */
+button{
+    padding:8px 12px;
+    background:#273c75;
+    color:white;
+    border:none;
+    border-radius:6px;
+    cursor:pointer;
+    margin:3px;
+}
+
+button:hover{
+    background:#192a56;
+}
+
+/* BLOG CARD */
+.blog-card{
+    background:white;
+    padding:15px;
+    margin:10px 0;
+    border-radius:10px;
+    box-shadow:0 2px 8px rgba(0,0,0,0.1);
+    display:flex;
+    gap:15px;
+    align-items:flex-start;
+}
+
+/* IMAGE FIX */
+.blog-card img{
+    width:90px;
+    height:90px;
+    object-fit:cover;
+    border-radius:10px;
+    flex-shrink:0;
+}
+
+/* TEXT WRAP */
+.blog-card h4{
+    margin:0;
+    word-break:break-word;
+}
+
+.blog-card small{
+    display:block;
+    margin-top:4px;
+    color:#666;
+}
+
+/* MODAL */
+.modal{
+    display:none;
+    position:fixed;
+    top:0; left:0;
+    width:100%;
+    height:100%;
+    background:rgba(0,0,0,0.6);
+    justify-content:center;
+    align-items:center;
+    padding:10px;
+}
+
+.modal-content{
+    background:white;
+    padding:20px;
+    border-radius:10px;
+    width:100%;
+    max-width:400px;
+    max-height:90vh;
+    overflow-y:auto;
+}
+
+.modal img{
+    width:100%;
+    border-radius:10px;
+    margin-bottom:10px;
+}
+
+/* CLOSE */
+.close{
+    float:right;
+    cursor:pointer;
+    font-size:18px;
+}
+
+/* ======================
+   RESPONSIVE FIXES
+====================== */
+
+/* TABLET */
+@media(max-width:900px){
+    .blog-card{
+        flex-direction:row;
+        align-items:flex-start;
+    }
+}
+
+/* MOBILE */
+@media(max-width:600px){
+
+    body{
+        padding:12px;
+    }
+
+    h2,h3{
+        text-align:center;
+    }
+
+    .blog-card{
+        flex-direction:column;
+        align-items:stretch;
+    }
+
+    .blog-card img{
+        width:100%;
+        height:180px;
+    }
+
+    button{
+        width:100%;
+        margin:4px 0;
+    }
+
+    header{
+        flex-direction:column;
+        align-items:flex-start;
+    }
+}
+
+/* SMALL MOBILE */
+@media(max-width:380px){
+    input, textarea{
+        font-size:13px;
+    }
+
+    button{
+        font-size:13px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <div class="brand">
+      <div class="logo">QR</div>
+      <div>
+        <div style="font-weight:700">QR Code Generator Pro</div>
+        <div style="font-size:12px;color:#6b7280">Free & fast QR codes</div>
+      </div>
+    </div>
+
+    <nav class="nav">
+      <a href="index.html">Home</a>
+      <a href="about.html">About</a>
+      <a href="contact.html">Contact</a>
+      <a href="privacy-policy.html">Privacy</a>
+      <a href="terms.html">Terms</a>
+      <a href="blogs.html">Blogs</a>
+      <a href="admin.html">Admin</a>
+    </nav>
+</header>
+
+<h2>Add / Edit Blog</h2>
+
+<input id="title" placeholder="Blog Title" />
+<textarea id="desc" placeholder="Blog Description"></textarea>
+<input type="file" id="image" accept="image/*" />
+
+<button onclick="addOrUpdateBlog()">Save Blog</button>
+
+<hr>
+
+<h3>Blog History</h3>
+<div id="list"></div>
+
+<!-- VIEW MODAL -->
+<div class="modal" id="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal()">X</span>
+        <img id="mimg" />
+        <h3 id="mtitle"></h3>
+        <p id="mdesc"></p>
+        <small id="mdate"></small>
+    </div>
+</div>
+
+<script>
+let blogs = JSON.parse(localStorage.getItem("blogs")) || [];
+let editIndex = -1;
+let tempImage = "";
+
+function render() {
+    let html = "";
+
+    blogs.forEach((b, i) => {
+        html += `
+        <div class="blog-card">
+            <img src="${b.image}" />
+            <div>
+                <h4>${b.title}</h4>
+                <small>${b.date}</small>
+                <br>
+
+                <button onclick="viewBlog(${i})">View</button>
+                <button onclick="editBlog(${i})">Edit</button>
+                <button onclick="deleteBlog(${i})">Delete</button>
+            </div>
+        </div>`;
+    });
+
+    document.getElementById("list").innerHTML = html;
+}
+
+/* JS SAME (NO CHANGE) */
+function addOrUpdateBlog(){
+    let title=document.getElementById("title").value;
+    let desc=document.getElementById("desc").value;
+    let file=document.getElementById("image").files[0];
+
+    if(editIndex===-1 && !file){
+        alert("Image required");
+        return;
+    }
+
+    if(file){
+        let reader=new FileReader();
+        reader.onload=function(e){
+            saveBlog(title,desc,e.target.result);
+        };
+        reader.readAsDataURL(file);
+    }else{
+        saveBlog(title,desc,tempImage);
+    }
+}
+
+function saveBlog(title,desc,image){
+    let data={
+        id:Date.now(),
+        title,
+        desc,
+        image,
+        date:new Date().toISOString().split('T')[0]
+    };
+
+    if(editIndex===-1){
+        blogs.push(data);
+    }else{
+        data.id=blogs[editIndex].id;
+        data.date=blogs[editIndex].date;
+        blogs[editIndex]=data;
+        editIndex=-1;
+    }
+
+    localStorage.setItem("blogs",JSON.stringify(blogs));
+    clearForm();
+    render();
+}
+
+function editBlog(i){
+    editIndex=i;
+    document.getElementById("title").value=blogs[i].title;
+    document.getElementById("desc").value=blogs[i].desc;
+    tempImage=blogs[i].image;
+}
+
+function deleteBlog(i){
+    blogs.splice(i,1);
+    localStorage.setItem("blogs",JSON.stringify(blogs));
+    render();
+}
+
+function viewBlog(i){
+    document.getElementById("mimg").src=blogs[i].image;
+    document.getElementById("mtitle").innerText=blogs[i].title;
+    document.getElementById("mdesc").innerText=blogs[i].desc;
+    document.getElementById("mdate").innerText=blogs[i].date;
+    document.getElementById("modal").style.display="flex";
+}
+
+function closeModal(){
+    document.getElementById("modal").style.display="none";
+}
+
+function clearForm(){
+    document.getElementById("title").value="";
+    document.getElementById("desc").value="";
+    document.getElementById("image").value="";
+}
+
+render();
+</script>
+
+</body>
+</html>
